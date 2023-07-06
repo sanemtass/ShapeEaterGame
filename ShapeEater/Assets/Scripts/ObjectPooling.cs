@@ -53,29 +53,49 @@ public class ObjectPooling : MonoBehaviour
 
     public GameObject GetPoolObject(int objectType)
     {
-        if (objectType >= pools.Length) return null;
-        if (pools[objectType].PooledObjects.Count == 0)
+        if (pools[objectType].PooledObjects.Count > 0)
         {
-            Debug.Log("Stack limit reached");
-            AddSizePool(5f, objectType);
+            GameObject obj = pools[objectType].PooledObjects.Dequeue();
+            obj.SetActive(true);
+            return obj;
         }
 
-
-        GameObject obj = pools[objectType].PooledObjects.Dequeue();
-        obj.SetActive(true);
-        if (objectType == 0)
-        {
-            pools[objectType].PooledObjects.Enqueue(obj);
-        }
-        return obj;
+        Debug.LogError("No available objects in the pool!");
+        return null;
     }
 
-    public void SetPoolObject(GameObject pooledObject, int objectType)
+    public void SetPoolObject(GameObject pooledObject)
     {
-        if (objectType >= pools.Length) return;
-        pools[objectType].PooledObjects.Enqueue(pooledObject);
-        pooledObject.SetActive(false);
+        Shape shape = pooledObject.GetComponent<Shape>();
+        Obstacle obstacle = pooledObject.GetComponent<Obstacle>();
+
+        int type;
+
+        if (shape != null)
+        {
+            type = shape.type;
+        }
+        else if (obstacle != null)
+        {
+            type = obstacle.type;
+        }
+        else
+        {
+            Debug.LogError("Object is not a shape or an obstacle!");
+            return;
+        }
+
+        if (type < pools.Length)
+        {
+            pools[type].PooledObjects.Enqueue(pooledObject);
+            pooledObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Object type is invalid!");
+        }
     }
+
 
     public void AddSizePool(float amount, int objectType)
     {

@@ -94,8 +94,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4071551198354394458}
   - component: {fileID: 1404105598712148311}
-  - component: {fileID: -4184639212366676072}
   - component: {fileID: 1930989085709991440}
+  - component: {fileID: -4818590947716881321}
   m_Layer: 0
   m_Name: Obstacle_Ctrl
   m_TagString: Untagged
@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 8683744047703678948}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3373812694317016780}
@@ -131,20 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15913b903f1c0498fb23994fde658933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
---- !u!114 &-4184639212366676072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8683744047703678948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01a69508ef752454390482c29b63be8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 3
+  speed: 5
 --- !u!61 &1930989085709991440
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -171,3 +158,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5200992, y: 1.4489743}
   m_EdgeRadius: 0
+--- !u!114 &-4818590947716881321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8683744047703678948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e529c9c7392ae4a6f89fa6f33c44a869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 3
