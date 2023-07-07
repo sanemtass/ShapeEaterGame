@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    public GameObject celebrationPanel;
+    public ParticleSystem confettiParticles;
 
     private void Awake()
     {
@@ -19,5 +21,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    public void EndGame()
+    {
+        celebrationPanel.SetActive(true);
+
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
+
+        confettiParticles.Play();
+
+        Invoke("StopTime", 1.5f);
+    }
+
+    private void StopTime()
+    {
+        Time.timeScale = 0f;
+    }
 }

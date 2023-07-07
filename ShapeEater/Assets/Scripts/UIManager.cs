@@ -4,10 +4,12 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance; // Diğer scriptlerden erişebilmek için static bir instance.
+    public static UIManager Instance;
 
-    public TextMeshProUGUI scoreText; // Skoru göstermek için kullanılan Text component.
+    public TextMeshProUGUI scoreText;
     public TextMeshProUGUI missionText;
+    public Image shapeImage;
+    public Sprite shapeImageSprite;
 
     private void Awake()
     {
@@ -18,25 +20,46 @@ public class UIManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
+
+        gameObject.SetActive(true);
     }
 
     public void UpdateScore(int score)
     {
-        scoreText.text = "Score: " + score; // Skoru güncelle.
+        scoreText.text = "Score: " + score;
     }
 
     public void UpdateMission()
     {
-        int currentMission = MissionManager.Instance.currentMission; // Mevcut görevi al.
+        if (UIManager.Instance == null)
+        {
+            Debug.LogError("UIManager instance is null!");
+            return;
+        }
 
-        // Görev için gereken şekli al.
+        int currentMission = MissionManager.Instance.currentMission;
+
         GameObject requiredShapeObject = ObjectPooling.Instance.GetPoolObject(currentMission - 1);
-        Shape requiredShape = requiredShapeObject.GetComponent<Shape>();
-        string shapeName = requiredShape.name;
 
-        // Görev metnini güncelle.
+        string shapeName;
+        Sprite shapeSprite;
+
+        if (requiredShapeObject != null)
+        {
+            Shape requiredShape = requiredShapeObject.GetComponent<Shape>();
+            shapeName = requiredShape.shapeName;
+            shapeSprite = requiredShape.shapeSprite;
+        }
+        else
+        {
+            shapeName = "No Shape";
+            shapeSprite = null;
+        }
+
         missionText.text = "Mission " + currentMission + ": Collect 5 " + shapeName + "s!";
-    }
 
+        shapeImage.sprite = shapeSprite;
+    }
 }

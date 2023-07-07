@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Pacman : MonoBehaviour
 {
-    public GameObject[] shapes; // Bu, Pacman'in dönüştürülebileceği şekillerin listesidir.
-    public AudioClip shapeChangeSound; // Şekil değiştirme sesi.
+    public GameObject[] shapes;
+    public AudioClip shapeChangeSound;
     public MissionManager missionManager;
-    public int currentShape = 0; // Bu, şu anki aktif olan şeklin index'idir.
+    public int currentShape = 0;
+    public int score = 0;
 
-    private AudioSource audioSource; // Sesleri çalmak için kullanılan AudioSource.
-    private int score = 0;
+    private AudioSource audioSource;
 
     void Start()
     {
@@ -21,36 +21,40 @@ public class Pacman : MonoBehaviour
 
     void ChangeShape(int newShapeIndex)
     {
-        // Eğer yeni şekil currentMission-1. indekste değilse...
         if (newShapeIndex != missionManager.currentMission - 1)
         {
-            // Sallanma animasyonu başlat
-            float duration = 0.5f; // Sallanmanın süresi.
-            Vector3 strength = new Vector3(1f, 1f, 0f); // Sallanmanın gücü.
-            int vibrato = 10; // Sallanmanın hızı.
+            float duration = 0.5f;
+            Vector3 strength = new Vector3(0f, .5f, 0f);
+            int vibrato = 70;
 
             transform.DOShakePosition(duration, strength, vibrato);
         }
-        else // Eğer yeni şekil currentMission-1. indeksteyse...
+        else // If the new shape is currentMission-1. if it's in the index...
         {
-            // ...sesi çal.
             audioSource.PlayOneShot(shapeChangeSound);
 
             score++;
+            Debug.Log("Score: " + score);
             UIManager.Instance.UpdateScore(score);
 
-            // Eğer skor 5'e ulaştıysa...
-            if (score >= 5)
+            // If the score reaches 5 and the current task is 3
+            if (score >= 5 && missionManager.currentMission == 3)
             {
-                MissionManager.Instance.NextMission();
+                GameManager.Instance.EndGame();
+            }
+            else
+            {
+                if (score >= 5)
+                {
+                    MissionManager.Instance.NextMission();
+                    //UIManager.Instance.UpdateMission();
+                }
             }
         }
 
-        // Pacman'in şeklini değiştir.
-        shapes[currentShape].SetActive(false); // Eski şekli devre dışı bırak.
-        shapes[newShapeIndex].SetActive(true); // Yeni şekli aktif hale getir.
+        shapes[currentShape].SetActive(false); 
+        shapes[newShapeIndex].SetActive(true); 
 
-        // Şimdi yeni şekil aktif şekil oldu.
         currentShape = newShapeIndex;
     }
 
@@ -59,17 +63,15 @@ public class Pacman : MonoBehaviour
         Shape collidedShape = collision.gameObject.GetComponent<Shape>();
         Obstacle collidedObstacle = collision.gameObject.GetComponent<Obstacle>();
 
-        if (collidedShape != null) // Eğer çarpıştığımız obje bir şekil ise...
+        if (collidedShape != null)
         {
-            ChangeShape(collidedShape.type); // ...şekli değiştir.
+            ChangeShape(collidedShape.type);
         }
-        // Eğer çarpıştığımız obje bir engel ise...
         else if (collidedObstacle != null)
         {
-            // "duration" saniye boyunca, "strength" gücünde ve "vibrato" hızında salla.
-            float duration = 0.5f; // Sallanmanın süresi.
-            Vector3 strength = new Vector3(1f, 1f, 0f); // Sallanmanın gücü.
-            int vibrato = 10; // Sallanmanın hızı.
+            float duration = 0.5f;
+            Vector3 strength = new Vector3(0f, .5f, 0f);
+            int vibrato = 70;
 
             transform.DOShakePosition(duration, strength, vibrato);
         }
@@ -80,5 +82,4 @@ public class Pacman : MonoBehaviour
         score = 0;
         UIManager.Instance.UpdateScore(score);
     }
-
 }

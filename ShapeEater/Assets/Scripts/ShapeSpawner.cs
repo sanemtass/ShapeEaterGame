@@ -24,7 +24,19 @@ public class ShapeSpawner : MonoBehaviour
                 Vector2 spawnPosition = new Vector2(transform.position.x, Random.Range(-3f, 3f));
                 shape.transform.position = spawnPosition;
                 shape.transform.rotation = Quaternion.identity;
+
+                if (type == 3 && shape == null)
+                {
+                    ObjectPooling.Instance.AddSizePool(1, type);
+                    shape = ObjectPooling.Instance.GetPoolObject(type);
+                    if (shape != null)
+                    {
+                        shape.transform.position = spawnPosition;
+                        shape.transform.rotation = Quaternion.identity;
+                    }
+                }
             }
         }
     }
 }
+ 

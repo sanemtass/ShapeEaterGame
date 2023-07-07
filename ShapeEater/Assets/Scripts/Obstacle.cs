@@ -10,7 +10,6 @@ public class Obstacle : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Pacman"))
         {
-            Debug.Log("carpisti miOBS");
             ObjectPooling.Instance.SetPoolObject(gameObject);
         }
     }

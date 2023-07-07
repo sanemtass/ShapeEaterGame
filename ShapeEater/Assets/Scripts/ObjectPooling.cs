@@ -96,7 +96,6 @@ public class ObjectPooling : MonoBehaviour
         }
     }
 
-
     public void AddSizePool(float amount, int objectType)
     {
         for (int i = 0; i < amount; i++)

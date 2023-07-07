@@ -8,6 +8,9 @@ public class MissionManager : MonoBehaviour
 
     public Pacman pacman;
     public int currentMission = 1;
+    public AudioClip missionChangeSound;
+
+    private AudioSource audioSource;
 
     void Awake()
     {
@@ -20,6 +23,8 @@ public class MissionManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public int[] GetActiveObjectTypes()
@@ -29,16 +34,16 @@ public class MissionManager : MonoBehaviour
         switch (currentMission)
         {
             case 1:
-                activeObjectTypes = new int[] { 0, 3 }; // Üçgen ve engel
+                activeObjectTypes = new int[] { 0, 3 }; // circle and obstacle
                 break;
             case 2:
-                activeObjectTypes = new int[] { 1, 3 }; // Kare ve engel
+                activeObjectTypes = new int[] { 1, 3 }; // square and obstacle
                 break;
             case 3:
-                activeObjectTypes = new int[] { 2, 3 }; // Altıgen ve engel
+                activeObjectTypes = new int[] { 2, 3 }; // hexagon and obstacle
                 break;
             default:
-                activeObjectTypes = new int[] { }; // Geçersiz görev
+                activeObjectTypes = new int[] { };
                 break;
         }
 
@@ -51,8 +56,20 @@ public class MissionManager : MonoBehaviour
     {
         currentMission++;
         pacman.ResetScore();
-        UIManager.Instance.UpdateMission();
+        UIManager.Instance.UpdateScore(pacman.score);
+
+        if (currentMission == 4 && pacman.score >= 5)
+        {
+            GameManager.Instance.EndGame();
+        }
+        else
+        {
+            if (currentMission <= 3)
+            {
+                UIManager.Instance.UpdateMission();
+
+                audioSource.PlayOneShot(missionChangeSound);
+            }
+        }
     }
-
 }
-
